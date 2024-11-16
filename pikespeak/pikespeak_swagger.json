@@ -1,0 +1,2491 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "PIKESPEAK API",
+    "description": "Query any data from pikespeak and start to build! Get your api key: https://pikespeak.ai/myaccount"
+  },
+  "host": "api.pikespeak.ai",
+  "basePath": "/",
+  "schemes": ["https"],
+  "securityDefinitions": {
+    "apiKeyAuth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "x-api-key",
+      "description": "you can access your api key at https://pikespeak.ai/myaccount"
+    }
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/tx/parsed-execution-by-contract": {
+      "get": {
+        "tags": ["Transaction"],
+        "description": "Get a transaction graph with all receipts by contract.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "query",
+            "description": "near contract address",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "method",
+            "in": "query",
+            "description": "filter for a specific method",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "result offset (default 0)",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "result limit (max 50, default 50)",
+            "required": false,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return all the parameters, events and results of all the transaction execution plan flattened",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "tx": {
+                    "type": "object",
+                    "properties": {
+                      "hash": { "type": "string", "example": "string" },
+                      "from": { "type": "string", "example": "string" },
+                      "to": { "type": "string", "example": "string" },
+                      "executor": { "type": "string", "example": "string" },
+                      "blockHeight": { "type": "string", "example": "string" },
+                      "timestamp": { "type": "string", "example": "string" },
+                      "gasBurnt": { "type": "string", "example": "string" }
+                    }
+                  },
+                  "receipts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "hash": { "type": "string", "example": "string" },
+                        "from": { "type": "string", "example": "string" },
+                        "to": { "type": "string", "example": "string" },
+                        "predecessor": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "blockHeight": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "timestamp": { "type": "string", "example": "string" },
+                        "successData": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "logs": { "type": "string", "example": "any" },
+                        "gasBurnt": { "type": "string", "example": "number" },
+                        "actions": { "type": "string", "example": "Array" }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": { "name": "main" }
+            }
+          },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/tx/parsed-execution-by-hash": {
+      "get": {
+        "tags": ["Transaction"],
+        "description": "Get a transaction parsed execution by hash.",
+        "parameters": [{ "name": "hash", "in": "query", "type": "string" }],
+        "responses": {
+          "200": {
+            "description": "Return all the parameters, events and results of all the transaction execution plan flattened",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tx": {
+                  "type": "object",
+                  "properties": {
+                    "hash": { "type": "string", "example": "string" },
+                    "from": { "type": "string", "example": "string" },
+                    "to": { "type": "string", "example": "string" },
+                    "executor": { "type": "string", "example": "string" },
+                    "blockHeight": { "type": "string", "example": "string" },
+                    "timestamp": { "type": "string", "example": "string" },
+                    "gasBurnt": { "type": "string", "example": "string" }
+                  }
+                },
+                "receipts": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "hash": { "type": "string", "example": "string" },
+                      "from": { "type": "string", "example": "string" },
+                      "to": { "type": "string", "example": "string" },
+                      "predecessor": { "type": "string", "example": "string" },
+                      "blockHeight": { "type": "string", "example": "string" },
+                      "timestamp": { "type": "string", "example": "string" },
+                      "successData": { "type": "string", "example": "string" },
+                      "logs": { "type": "string", "example": "any" },
+                      "gasBurnt": { "type": "string", "example": "number" },
+                      "actions": { "type": "string", "example": "Array" }
+                    }
+                  }
+                }
+              },
+              "xml": { "name": "main" }
+            }
+          },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/tx/hash/{hash}": {
+      "get": {
+        "tags": ["Transaction"],
+        "description": "Get a transaction by hash.",
+        "parameters": [
+          { "name": "hash", "in": "path", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return basic info of a transaction",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "block_height": { "type": "string", "example": "103205858" },
+                  "chunk_hash": {
+                    "type": "string",
+                    "example": "Ev8q8N6LgEafW43u2Z6sEgSec3TpyhuBMweaASaoQKTL"
+                  },
+                  "block_hash": {
+                    "type": "string",
+                    "example": "BJLfiJV23NcSLfTypUWiXw3hVAU5NYarc9XvET3qAX76"
+                  },
+                  "signer": {
+                    "type": "string",
+                    "example": "sbv2-authority.near"
+                  },
+                  "receiver": {
+                    "type": "string",
+                    "example": "switchboard-v2.near"
+                  },
+                  "method_name": { "type": "string", "example": "crank_pop" },
+                  "transaction_timestamp": {
+                    "type": "string",
+                    "example": "1697116776658357040"
+                  },
+                  "id": {
+                    "type": "string",
+                    "example": "49SyrzppJcuerBPjwdkvaxHrjnKqop4SaCrSi1f6JqPQ"
+                  },
+                  "first_action_type": {
+                    "type": "string",
+                    "example": "functionCall"
+                  },
+                  "all_action_type": {
+                    "type": "string",
+                    "example": "functionCall"
+                  },
+                  "has_error": { "type": "boolean", "example": false }
+                }
+              },
+              "xml": { "name": "main" }
+            }
+          },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/tx/graph-by-hash/{hash}": {
+      "get": {
+        "tags": ["Transaction"],
+        "description": "Get a transaction graph with all receipts by hash.",
+        "parameters": [
+          { "name": "hash", "in": "path", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/account/accounts-parents": {
+      "get": {
+        "tags": ["Account"],
+        "description": "Get parents of a given account list: \\a.near,b.near,c.near...\\",
+        "parameters": [
+          {
+            "name": "accounts",
+            "in": "query",
+            "description": "limit max is 1000 accounts",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return an array of parent/child and creation infos",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "account_id": {
+                    "type": "string",
+                    "example": "someaccount.near"
+                  },
+                  "timestamp_creation": {
+                    "type": "string",
+                    "example": "1632323943447496451"
+                  },
+                  "timestamp_deletion": {},
+                  "balance": {},
+                  "is_deleted": { "type": "boolean", "example": false },
+                  "block_height_creation": {
+                    "type": "number",
+                    "example": 48387060
+                  },
+                  "block_height_deletion": {},
+                  "sha_code": {
+                    "type": "string",
+                    "example": "47efb37ed3d188dd70fd7206be5c3b221f229694e5cfb38e152bad69fdfa12ed"
+                  },
+                  "offset_id": { "type": "number", "example": 4730415 },
+                  "parent": { "type": "string", "example": "coin-op.near" }
+                }
+              },
+              "xml": { "name": "main" }
+            }
+          },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/account/transactions/{contract}": {
+      "get": {
+        "tags": ["Account"],
+        "description": "Raw transactions for a given account.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit max 50 - default to 50",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "default to 0",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/account/daily-tx-count/{contract}": {
+      "get": {
+        "tags": ["Account"],
+        "description": "Daily number of transactions for a given account.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/account/tx-count/{contract}": {
+      "get": {
+        "tags": ["Account"],
+        "description": "Total number of transactions for a given account.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/account/balance/{contract}": {
+      "get": {
+        "tags": ["Account"],
+        "description": "Account balance.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/account/wealth/{contract}": {
+      "get": {
+        "tags": ["Account"],
+        "description": "Account Wealth. Return balance and value in USD + defi holding for Ref-finance and Burrow",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/account/balances": {
+      "get": {
+        "tags": ["Account"],
+        "description": "Balances for multiple accounts",
+        "parameters": [
+          {
+            "name": "accounts",
+            "in": "query",
+            "description": "list of accounts",
+            "required": true,
+            "type": "array"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/account/ft-transfer/{contract}": {
+      "get": {
+        "tags": ["Account"],
+        "description": "Account ft-transfer.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit max 50 - default to 50",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "default to 0",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/account/near-transfer/{contract}": {
+      "get": {
+        "tags": ["Account"],
+        "description": "Account ft-transfer.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit max 50 - default to 50",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "default to 0",
+            "required": false,
+            "type": "string"
+          },
+          { "name": "minamount", "in": "query", "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/account/incoming-near/{contract}": {
+      "get": {
+        "tags": ["Account"],
+        "description": "Top 50 NEAR sender to a given account",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/account/outgoing-near/{contract}": {
+      "get": {
+        "tags": ["Account"],
+        "description": "Top 50 NEAR receivers from a given account",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/account/incoming-token/{contract}": {
+      "get": {
+        "tags": ["Account"],
+        "description": "Top 50 tokens senders to a given account",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/account/outgoing-token/{contract}": {
+      "get": {
+        "tags": ["Account"],
+        "description": "Top 50 tokens receivers from a given account",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/account/*tags/{contract}": {
+      "get": {
+        "tags": ["Account"],
+        "description": "Returns account tags",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/account/*infos/{contract}": {
+      "get": {
+        "tags": ["Account"],
+        "description": "Returns basic account info",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/bridge/probable-eth-addresses/{account}": {
+      "get": {
+        "tags": ["Bridge"],
+        "description": "Find linked ethereum addresses to an account.",
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/bridge/bridge-unique-users": {
+      "get": {
+        "tags": ["Bridge"],
+        "description": "Get total unique rainbow bridge users.",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "you can get unique users by type: WITHDRAW, DEPOSIT or ALL",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/bridge/bridge-events": {
+      "get": {
+        "tags": ["Bridge"],
+        "description": "Get bridge events by type (DEPOSIT, WITHDRAW).",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "events by type: WITHDRAW or DEPOSIT",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit max 50 - default to 50",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "default to 0",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/bridge/top-stable-transfers": {
+      "get": {
+        "tags": ["Bridge"],
+        "description": "Get top bridge stable transfers.",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "events by type: WITHDRAW, DEPOSIT, ALL",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "network",
+            "in": "query",
+            "description": "filter on network: AURORA, NEAR",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit max 50 - default to 50",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "default to 0",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/bridge/total-stable-transfers": {
+      "get": {
+        "tags": ["Bridge"],
+        "description": "Get total amount of bridge stable coins transfers.",
+        "parameters": [],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/contract-analysis/unique-users-by-period/{contract}": {
+      "get": {
+        "tags": ["Contract Analysis"],
+        "description": "Gives unique users for period day,week,month.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/contract-analysis/metrics/{contract}": {
+      "get": {
+        "tags": ["Contract Analysis"],
+        "description": "Gives daily metrics for a given contract.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/contract-analysis/classification": {
+      "get": {
+        "tags": ["Contract Analysis"],
+        "description": "Return all classified accounts.",
+        "parameters": [
+          {
+            "name": "isDapp",
+            "in": "query",
+            "description": "Filter if the account is a dapp or not.",
+            "required": true,
+            "type": "boolean"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/contract-analysis/classification-categories": {
+      "get": {
+        "tags": ["Contract Analysis"],
+        "description": "Return all possible classifications.",
+        "parameters": [],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/contract-analysis/retention/{contract}": {
+      "get": {
+        "tags": ["Contract Analysis"],
+        "description": "Retention rate for a given account by month starting a specific date",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "Fetch first without this parameter do get available startDate.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/contract-analysis/crossdapp-near-spending/{contract}": {
+      "get": {
+        "tags": ["Contract Analysis"],
+        "description": "List of each contracts that users of a given contract spent NEAR on.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/contract-analysis/crossdapp-near-spending-user-list/{contract}": {
+      "get": {
+        "tags": ["Contract Analysis"],
+        "description": "List of each users of a contract and where those users spent NEAR on other contracts.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/contract-analysis/crossdapp-ft-spending/{contract}": {
+      "get": {
+        "tags": ["Contract Analysis"],
+        "description": "List of each contracts that users of a given contract spent FT on.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/contract-analysis/crossdapp-ft-spending-user-list/{contract}": {
+      "get": {
+        "tags": ["Contract Analysis"],
+        "description": "List of each users of a contract and where those users spent FT on other contracts.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/contract-analysis/contract-ranking": {
+      "get": {
+        "tags": ["Contract Analysis"],
+        "description": "Returns active contract ranking with weekly unique users and value moved.",
+        "parameters": [],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/daos/all": {
+      "get": {
+        "tags": ["Daos"],
+        "description": "Get all daos list.",
+        "parameters": [],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/daos/proposals-by-proposer/{accountId}": {
+      "get": {
+        "tags": ["Daos"],
+        "description": "Get all dao proposals.",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "result offset (default 0)",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "result limit (max 50, default 50)",
+            "required": false,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/daos/proposals/status/{dao}": {
+      "get": {
+        "tags": ["Daos"],
+        "description": "Get proposals status.",
+        "parameters": [
+          { "name": "dao", "in": "path", "required": true, "type": "string" }
+        ],
+        "responses": {}
+      }
+    },
+    "/daos/members": {
+      "get": {
+        "tags": ["Daos"],
+        "description": "Get all daos members.",
+        "parameters": [],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/daos/votes/{dao}": {
+      "get": {
+        "tags": ["Daos"],
+        "description": "Get dao policy.",
+        "parameters": [
+          { "name": "dao", "in": "path", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/daos/bounties/{dao}": {
+      "get": {
+        "tags": ["Daos"],
+        "description": "Get dao policy.",
+        "parameters": [
+          { "name": "dao", "in": "path", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/daos/transfers-beneficiaries/{dao}": {
+      "get": {
+        "tags": ["Daos"],
+        "description": "Get dao policy.",
+        "parameters": [
+          { "name": "dao", "in": "path", "required": true, "type": "string" }
+        ],
+        "responses": {}
+      }
+    },
+    "/daos/top-proposers/{dao}": {
+      "get": {
+        "tags": ["Daos"],
+        "description": "Get dao policy.",
+        "parameters": [
+          { "name": "dao", "in": "path", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/event-historic/{contract}": {
+      "get": {
+        "tags": ["Account"],
+        "description": "Get account event historic.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit max 50 - default to 50",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "default to 0",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "timestampStart",
+            "in": "query",
+            "description": "format: yyyy-mm-dd hh-mm-ss (example:2022-06-14 17:15:30)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "timestampEnd",
+            "in": "query",
+            "description": "format: yyyy-mm-dd hh-mm-ss (example:2022-06-14 17:15:30)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "contractFilter",
+            "in": "query",
+            "description": "Will return transactions that are linked to this contract.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filters",
+            "in": "query",
+            "description": "ADD_LIQUIDITY, HARVEST_REWARDS, REF_DEPOSIT,  REMOVE_LIQUIDITY, SEND_RECEIVE, SWAP, LENDING_BORROW, LENDING_DEPOSIT,  LENDING_INCREASE_COLLATERAL, LENDING_REPAY, LENDING_WITHDRAW,LIQUID_UNSTAKE,FT_TRANSFER,  LIQUID_INSTANT_UNSTAKE,STAKE_WITHDRAW,STAKE_DEPOSIT,WITHDRAW, FUNCTION_CALL,DEPOSIT,  FT_TRANSFER_FROM_AURORA, LIQUID_WITHDRAW, LIQUID_STAKE_DEPOSIT, NEAR_TRANSFER",
+            "required": false,
+            "type": "array"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/event-historic/count/{contract}": {
+      "get": {
+        "tags": ["Account"],
+        "description": "Get number of events for an account.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/event-historic/csv/{contract}": {
+      "get": {
+        "tags": ["Account"],
+        "description": "Get account event historic csv format.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit max 50 - default to 50",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "default to 0",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "timestampStart",
+            "in": "query",
+            "description": "format: yyyy-mm-dd hh-mm-ss (example:2022-06-14 17:15:30)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "timestampEnd",
+            "in": "query",
+            "description": "format: yyyy-mm-dd hh-mm-ss (example:2022-06-14 17:15:30)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filters",
+            "in": "query",
+            "description": "ADD_LIQUIDITY, HARVEST_REWARDS, REF_DEPOSIT,  REMOVE_LIQUIDITY, SEND_RECEIVE, SWAP, LENDING_BORROW, LENDING_DEPOSIT,  LENDING_INCREASE_COLLATERAL, LENDING_REPAY, LENDING_WITHDRAW,LIQUID_UNSTAKE,FT_TRANSFER,  LIQUID_INSTANT_UNSTAKE,STAKE_WITHDRAW,STAKE_DEPOSIT,WITHDRAW, FUNCTION_CALL,DEPOSIT,  FT_TRANSFER_FROM_AURORA, LIQUID_WITHDRAW, LIQUID_STAKE_DEPOSIT, NEAR_TRANSFER",
+            "required": false,
+            "type": "array"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/event-historic/account/relationships/{contract}": {
+      "get": {
+        "tags": ["Account"],
+        "description": "Gives relationships between an account and others accounts having search parameter in their name.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "account name or part of account name - min 4 characters",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit max 50 - default to 50",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/event-historic/account/relationship-analysis/{contract}": {
+      "get": {
+        "tags": ["Account"],
+        "description": "Gives all events between two accounts.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountToCompare",
+            "in": "query",
+            "description": "Account to compare with.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/hot-wallets/near": {
+      "get": {
+        "tags": ["Hot Wallets"],
+        "description": "Most active wallets NEAR senders.",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/hot-wallets/stable": {
+      "get": {
+        "tags": ["Hot Wallets"],
+        "description": "Most active wallets stable coins senders.",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/hot-wallets/fungible": {
+      "get": {
+        "tags": ["Hot Wallets"],
+        "description": "Most active wallets fungible tokens senders.",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/hot-wallets/bridge": {
+      "get": {
+        "tags": ["Hot Wallets"],
+        "description": "Most active wallets over rainbow bridge senders.",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/hot-wallets/24htxs/{account}/{type}": {
+      "get": {
+        "tags": ["Hot Wallets"],
+        "description": "Top 24h receiver for a given account in near,ft,stable or bridge.",
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          { "name": "type", "in": "path", "required": true, "type": "string" },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "default to 0",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit max 50 - default to 50",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "type is: near, ft, stable or bridge"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/money/token-holders/{contract}": {
+      "get": {
+        "tags": ["Money"],
+        "description": "Returns top holders for a given token.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit max 50 - default to 50",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "default to 0",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/money/token-last-txs/{contract}": {
+      "get": {
+        "tags": ["Money"],
+        "description": "Returns last txs with a given token.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit max 50 - default to 50",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "default to 0",
+            "required": false,
+            "type": "string"
+          },
+          { "name": "minAmount", "in": "query", "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/money/near-last-txs": {
+      "get": {
+        "tags": ["Money"],
+        "description": "Returns last txs with a given token.",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "default to 0",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit max 50 - default to 50",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "minAmount",
+            "in": "query",
+            "description": "default to 0",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/money/token-repartition/{contract}": {
+      "get": {
+        "tags": ["Money"],
+        "description": "Returns the repartition of a token by holders.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/money/token-stats/{contract}": {
+      "get": {
+        "tags": ["Money"],
+        "description": "Returns account number by club tags.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/money/ft-list": {
+      "get": {
+        "tags": ["Money"],
+        "description": "Return ft list.",
+        "parameters": [],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/money/richlist-token": {
+      "get": {
+        "tags": ["Money"],
+        "description": "Available rich lists.",
+        "parameters": [],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/network/daily-tx-count": {
+      "get": {
+        "tags": ["Network"],
+        "description": "Network number of transactions by day",
+        "parameters": [],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/network/total-tx": {
+      "get": {
+        "tags": ["Network"],
+        "description": "Network total number of transaction",
+        "parameters": [],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/network/last-week-total-tx": {
+      "get": {
+        "tags": ["Network"],
+        "description": "Network total number of transaction",
+        "parameters": [],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/network/total-account": {
+      "get": {
+        "tags": ["Network"],
+        "description": "Network total number of account.",
+        "parameters": [],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/network/active-accounts": {
+      "get": {
+        "tags": ["Network"],
+        "description": "Account transactions by day.",
+        "parameters": [
+          {
+            "name": "period",
+            "in": "query",
+            "description": "day, week or month",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/staking/probable-staking/{contract}": {
+      "get": {
+        "tags": ["Staking"],
+        "description": "Find staking pools for a given account.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/staking/staking/{contract}": {
+      "get": {
+        "tags": ["Staking"],
+        "description": "Find staking amounts for a given account.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/validators/last-epoch": {
+      "get": {
+        "tags": ["Validators"],
+        "description": "Return the last epoch id",
+        "parameters": [],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/validators/current-simple": {
+      "get": {
+        "tags": ["Validators"],
+        "description": "Simple current validators list without stats.",
+        "parameters": [],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/validators/current": {
+      "get": {
+        "tags": ["Validators"],
+        "description": "Current validators list with stats.",
+        "parameters": [],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/validators/details/{contract}": {
+      "get": {
+        "tags": ["Validators"],
+        "description": "Details for a given validator address.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/validators/epoch-history/{contract}": {
+      "get": {
+        "tags": ["Validators"],
+        "description": "Return validator reward and stake history by epoch.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/validators/delegators/{contract}": {
+      "get": {
+        "tags": ["Validators"],
+        "description": "Return delegators for a given validator and epoch id.",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "epoch_id",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/validators/delegators-by-epoch": {
+      "get": {
+        "tags": ["Validators"],
+        "description": "Return global delegators count (all near validators) by epoch.",
+        "parameters": [],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/validators/total-stake-history": {
+      "get": {
+        "tags": ["Validators"],
+        "description": "Return global NEAR staked amount (accross all near validators) by epoch.",
+        "parameters": [],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/validators/stake-delta-history": {
+      "get": {
+        "tags": ["Validators"],
+        "description": "Return global NEAR unstaked amount (accross all near validators) by epoch.",
+        "parameters": [],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/validators/top-delegators": {
+      "get": {
+        "tags": ["Validators"],
+        "description": "Return the top 20 biggest delegators accross all near validators by epoch id.",
+        "parameters": [
+          {
+            "name": "epoch_id",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/validators/delegator-history": {
+      "get": {
+        "tags": ["Validators"],
+        "description": "Return staking/unstaking history of a given delegator.",
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/validators/all-delegators-last-epoch": {
+      "get": {
+        "tags": ["Validators"],
+        "description": "Returns all the current validators.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit max 50 - default to 50",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "default to 0",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/validators/all-time-reward-by-validator": {
+      "get": {
+        "tags": ["Validators"],
+        "description": "Return validators cumulated rewards .",
+        "parameters": [],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/history/": {
+      "get": {
+        "tags": ["History"],
+        "description": "Get last events.",
+        "parameters": [],
+        "responses": { "400": { "description": "Bad Request" } }
+      }
+    },
+    "/sbt/sbt-by-owner": {
+      "get": {
+        "tags": ["SBTs"],
+        "description": "Get SBT by owner",
+        "parameters": [
+          {
+            "name": "holder",
+            "in": "query",
+            "description": "the sbt holder near address",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "class_id",
+            "in": "query",
+            "description": "the sbt class id",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "issuer",
+            "in": "query",
+            "description": "the sbt issuer near address",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "with_expired",
+            "in": "query",
+            "description": "set to true to include expired SBTs",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "registry",
+            "in": "query",
+            "description": "Return sbts for specified registry, (registry.i-am-human.near or registry-v1.gwg-testing.near)",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return sbts for a specific owner",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "issuer_id": { "type": "string", "example": "2" },
+                  "class_id": { "type": "string", "example": "1" },
+                  "token_id": { "type": "string", "example": "405" },
+                  "owner_id": { "type": "string", "example": "syi216.near" },
+                  "registry": {
+                    "type": "string",
+                    "example": "registry.i-am-human.near"
+                  },
+                  "issued_at": {
+                    "type": "string",
+                    "example": "2023-06-05T15:57:45.199Z"
+                  },
+                  "expired_at": {
+                    "type": "string",
+                    "example": "2024-12-04T15:57:45.199Z"
+                  },
+                  "sbt_issuer": {
+                    "type": "string",
+                    "example": "fractal.i-am-human.near"
+                  }
+                }
+              },
+              "xml": { "name": "main" }
+            }
+          },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/sbt/has-sbt": {
+      "get": {
+        "tags": ["SBTs"],
+        "description": "Check is a user holds a specific valid sbt",
+        "parameters": [
+          {
+            "name": "holder",
+            "in": "query",
+            "description": "the sbt holder near address",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "class_id",
+            "in": "query",
+            "description": "the sbt class id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "issuer",
+            "in": "query",
+            "description": "the sbt issuer near address",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "expired",
+            "in": "query",
+            "description": "true to include expired sbt",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "registry",
+            "in": "query",
+            "description": "Return sbts for specified registry, (registry.i-am-human.near or registry-v1.gwg-testing.near)",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Return a boolean" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/sbt/check-and-filter": {
+      "get": {
+        "tags": ["SBTs"],
+        "description": "Returns a subset of holders who have a token, that are not expired, matching the criteria.",
+        "parameters": [
+          {
+            "name": "holders",
+            "in": "query",
+            "description": "the sbt holder near address",
+            "required": true,
+            "type": "array"
+          },
+          {
+            "name": "class_id",
+            "in": "query",
+            "description": "the sbt class id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "issuer",
+            "in": "query",
+            "description": "the sbt issuer near address",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "registry",
+            "in": "query",
+            "description": "Return sbts for specified registry, (registry.i-am-human.near or registry-v1.gwg-testing.near)",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return an array of string; holders matching the criteria"
+          },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/nominations/nomination-count-by-house": {
+      "get": {
+        "tags": ["NDC Nominations"],
+        "description": "Get nomination count by house",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "query",
+            "description": "Return nomination count for specified contract nominations-v1.gwg-testing.near or nominations.ndc-gwg.near",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return count by house",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "CouncilOfAdvisors": { "type": "number", "example": 1 },
+                  "TransparencyCommission": { "type": "number", "example": 3 },
+                  "HouseOfMerit": { "type": "number", "example": 10 }
+                }
+              },
+              "xml": { "name": "main" }
+            }
+          },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/nominations/house-nominations": {
+      "get": {
+        "tags": ["NDC Nominations"],
+        "description": "Get nominations by house",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "query",
+            "description": "Return nomination count for specified contract nominations-v1.gwg-testing.near or nominations.ndc-gwg.near",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "house",
+            "in": "query",
+            "description": "HouseOfMerit, CouncilOfAdvisors, TransparencyCommission",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "result offset (default 0)",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "result limit (max 50, default 50)",
+            "required": false,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return an array of nominee",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "timestamp": { "type": "string", "example": "1667521389" },
+                  "nominee": { "type": "string", "example": "candidate2.near" },
+                  "house": { "type": "string", "example": "HouseOfMerit" },
+                  "comment": {
+                    "type": "string",
+                    "example": "I candidate for HouseOfMerit"
+                  },
+                  "link": {
+                    "type": "string",
+                    "example": "https://gov.near.org/"
+                  },
+                  "is_revoked": { "type": "boolean", "example": false },
+                  "upvotes": { "type": "string", "example": "3" }
+                }
+              },
+              "xml": { "name": "main" }
+            }
+          },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/nominations/candidates": {
+      "get": {
+        "tags": ["NDC Nominations"],
+        "description": "Get candidates",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "query",
+            "description": "Return nomination count for specified contract nominations-v1.gwg-testing.near or nominations.ndc-gwg.near",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "revoked",
+            "in": "query",
+            "description": "Return all candidates including revoked (default false)",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "candidate",
+            "in": "query",
+            "description": "Return a specific candidate if address is specified, the whole list if omitted",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "result offset (default 0)",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "result limit (max 50, default 50)",
+            "required": false,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return an array of nominee",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "timestamp": { "type": "string", "example": "1660521389" },
+                  "nominee": { "type": "string", "example": "candidate4.near" },
+                  "house": { "type": "string", "example": "HouseOfMerit" },
+                  "comment": {
+                    "type": "string",
+                    "example": "I candidate for HouseOfMerit"
+                  },
+                  "link": {
+                    "type": "string",
+                    "example": "https://gov.near.org/"
+                  },
+                  "is_revoked": { "type": "boolean", "example": true },
+                  "upvotes": { "type": "string", "example": "0" }
+                }
+              },
+              "xml": { "name": "main" }
+            }
+          },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/nominations/candidates-comments-and-upvotes": {
+      "get": {
+        "tags": ["NDC Nominations"],
+        "description": "Get comments and upvotes for a given candidate",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "query",
+            "description": "Return nomination count for specified contract nominations-v1.gwg-testing.near or nominations.ndc-gwg.near",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "candidate",
+            "in": "query",
+            "description": "candidate near address, return everything is omitted",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "result offset (default 0)",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "result limit (max 50, default 50)",
+            "required": false,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return an array of nominee, sum of upvotes and comments",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "candidate": {
+                    "type": "string",
+                    "example": "candidate1.near"
+                  },
+                  "upvotes": { "type": "string", "example": "3" },
+                  "comments": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "timestamp": {
+                          "type": "string",
+                          "example": "1687521480"
+                        },
+                        "id": { "type": "string", "example": "0" },
+                        "commentator": {
+                          "type": "string",
+                          "example": "com1.near"
+                        },
+                        "candidate": {
+                          "type": "string",
+                          "example": "candidate1.near"
+                        },
+                        "comment": {
+                          "type": "string",
+                          "example": "I support c 1"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": { "name": "main" }
+            }
+          },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/nominations/is-upvoted-by": {
+      "get": {
+        "tags": ["NDC Nominations"],
+        "description": "Check is a candidate has been updated by a specific voter",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "query",
+            "description": "Return nomination count for specified contract nominations-v1.gwg-testing.near or nominations.ndc-gwg.near",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "candidate",
+            "in": "query",
+            "description": "candidate near address",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "upvoter",
+            "in": "query",
+            "description": "voter near address",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Return a boolean" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/election/votes-by-candidate": {
+      "get": {
+        "tags": ["NDC Election"],
+        "description": "Get votes by candidate",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "query",
+            "description": "Return nomination count for specified contract nominations-v1.gwg-testing.near or nominations.ndc-gwg.near",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "candidate",
+            "in": "query",
+            "description": "candidate account id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return an array of votes for a given candidate",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "candidate": {
+                    "type": "string",
+                    "example": "candidate1.near"
+                  },
+                  "voter": { "type": "string", "example": "voter1.near" },
+                  "transaction_id": { "type": "string", "example": "txid1" },
+                  "timestamp": { "type": "string", "example": "2022-01-17" },
+                  "house": { "type": "string", "example": "HouseOfMerit" }
+                }
+              },
+              "xml": { "name": "main" }
+            }
+          },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/election/votes-by-voter": {
+      "get": {
+        "tags": ["NDC Election"],
+        "description": "Get votes by voters",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "query",
+            "description": "Return nomination count for specified contract nominations-v1.gwg-testing.near or nominations.ndc-gwg.near",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "voter",
+            "in": "query",
+            "description": "voter account id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return an array of votes for a given voter",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "candidate": {
+                    "type": "string",
+                    "example": "candidate1.near"
+                  },
+                  "voter": { "type": "string", "example": "voter1.near" },
+                  "transaction_id": { "type": "string", "example": "txid1" },
+                  "timestamp": { "type": "string", "example": "2022-01-17" },
+                  "house": { "type": "string", "example": "HouseOfMerit" }
+                }
+              },
+              "xml": { "name": "main" }
+            }
+          },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/election/total-votes": {
+      "get": {
+        "tags": ["NDC Election"],
+        "description": "Get total votes",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "query",
+            "description": "Return nomination count for specified contract nominations-v1.gwg-testing.near or nominations.ndc-gwg.near",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Return the number of total votes" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/election/total-voters": {
+      "get": {
+        "tags": ["NDC Election"],
+        "description": "Get total voter",
+        "parameters": [
+          {
+            "name": "contract",
+            "in": "query",
+            "description": "Return nomination count for specified contract nominations-v1.gwg-testing.near or nominations.ndc-gwg.near",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Return the number of voters" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/election/iah-by-flag": {
+      "get": {
+        "tags": ["NDC Election"],
+        "description": "Get IAH accounts counts by flag",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Return the number of IAH by flag category",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "total_iah": { "type": "string", "example": "3999" },
+                "black_list": { "type": "string", "example": "884" },
+                "white_list": { "type": "string", "example": "1405" },
+                "grey_list": { "type": "string", "example": "1710" }
+              },
+              "xml": { "name": "main" }
+            }
+          },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/election/is-bonded": {
+      "get": {
+        "tags": ["NDC Election"],
+        "description": "Get if an account is bonded",
+        "parameters": [
+          {
+            "name": "account",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "registry",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return the bonded amount for a given account and registry, if user unbonded the amount is 0, if user never bonded it returns false",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "account_id": { "type": "string", "example": "rubycop.near" },
+                "bond": { "type": "string", "example": "0" },
+                "registry": {
+                  "type": "string",
+                  "example": "registry-v1.gwg-testing.near"
+                }
+              },
+              "xml": { "name": "main" }
+            }
+          },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/custom/sharddog/nft-count": {
+      "get": {
+        "tags": ["Custom - Sharddog"],
+        "description": "Number of Sharddog NFT.",
+        "parameters": [],
+        "responses": { "200": { "description": "Return an integer" } }
+      }
+    },
+    "/custom/sharddog/owner-count": {
+      "get": {
+        "tags": ["Custom - Sharddog"],
+        "description": "Number of Sharddog NFT owner.",
+        "parameters": [],
+        "responses": { "200": { "description": "Return an integer" } }
+      }
+    },
+    "/custom/sharddog/created-wallet-count": {
+      "get": {
+        "tags": ["Custom - Sharddog"],
+        "description": "Number of wallet created with Sharddog.",
+        "parameters": [],
+        "responses": { "200": { "description": "Return an integer" } }
+      }
+    },
+    "/custom/sharddog/nft-by-collection": {
+      "get": {
+        "tags": ["Custom - Sharddog"],
+        "description": "Get NFT from a given collection.",
+        "parameters": [
+          {
+            "name": "collectionId",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return a list of nft owner",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "account_id": {
+                    "type": "string",
+                    "example": "cryptovaibhav.near"
+                  },
+                  "created": { "type": "boolean", "example": false },
+                  "nft_id": { "type": "string", "example": "167:31" },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2023-07-29T13:09:08.998Z"
+                  },
+                  "transaction_id": {
+                    "type": "string",
+                    "example": "CocA1Fj1VbtUnrWkJ5AhCksRmsZZBvX6eSCXHibWFhD3"
+                  },
+                  "original_minter": { "type": "boolean", "example": true },
+                  "original_minted_nft": {
+                    "type": "string",
+                    "example": "167:31"
+                  }
+                }
+              },
+              "xml": { "name": "main" }
+            }
+          }
+        }
+      }
+    },
+    "/custom/sharddog/created-wallets": {
+      "get": {
+        "tags": ["Custom - Sharddog"],
+        "description": "Get all the wallets created by sharddog.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Return a list of wallets",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "account_id": {
+                    "type": "string",
+                    "example": "cryptovaibhav.near"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2023-07-29T13:09:08.998Z"
+                  }
+                }
+              },
+              "xml": { "name": "main" }
+            }
+          }
+        }
+      }
+    },
+    "/custom/sharddog/activity": {
+      "get": {
+        "tags": ["Custom - Sharddog"],
+        "description": "Get sharddog activity feed.",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "default to 0",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit max 50 - default to 50",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return sbts for a specific owner",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "account_id": {
+                    "type": "string",
+                    "example": "jgodwill.near"
+                  },
+                  "created": { "type": "boolean", "example": false },
+                  "nft_id": { "type": "string", "example": "167:74" },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2023-07-31T11:58:12.090Z"
+                  },
+                  "transaction_id": {
+                    "type": "string",
+                    "example": "5qcaUWjVJ4jGhBTyASYz34Jmr1pXv32Pu7yqPdKxcbC1"
+                  },
+                  "original_minter": { "type": "boolean", "example": true },
+                  "original_minted_nft": {
+                    "type": "string",
+                    "example": "167:74"
+                  }
+                }
+              },
+              "xml": { "name": "main" }
+            }
+          }
+        }
+      }
+    },
+    "/defi/swaps/{account}": {
+      "get": {
+        "tags": ["Defi"],
+        "description": "Get swaps for a given account. If you dont want a specific account set account to all",
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit max 50 - default to 50",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "default to 0",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "timestampStart",
+            "in": "query",
+            "description": "1726038224",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "timestampEnd",
+            "in": "query",
+            "description": "1716038224",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "token",
+            "in": "query",
+            "description": "Filter over a specific token (example: wrap.near)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "in": "query",
+            "description": "Filters swaps that are above the given value in USD, default to 0(all swaps) ",
+            "required": false,
+            "type": "number"
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    }
+  },
+  "security": [{ "apiKeyAuth": [] }]
+}
